@@ -1,3 +1,17 @@
 <resources>
     <string name="app_name">ToDoList</string>
+    <string name="what">What do you need to do?</string>
+    <string name="enter">Enter a task</string>
+    <string name="due">Due date</string>
+    <string name="date">Enter a date</string>
+    <string name="time">Enter a time</string>
+    <string name="repeat">Repeat</string>
+
+
+    <string-array name="repeat_array">
+        <item>Once a day</item>
+        <item>Once a week</item>
+        <item>Once a month</item>
+    </string-array>
+
 </resources>

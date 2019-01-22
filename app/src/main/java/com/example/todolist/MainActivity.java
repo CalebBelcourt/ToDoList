@@ -14,6 +14,11 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         FloatingActionButton t_fab = findViewById(R.id.text_fab);
+        FloatingActionButton v_fab = findViewById(R.id.voice_fab);
+        t_fab.bringToFront();
+        v_fab.bringToFront();
+
+
         t_fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -21,6 +26,14 @@ public class MainActivity extends AppCompatActivity {
                 MainActivity.this.startActivity(intent);
             }
         });
+
+        v_fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //open up text to speech
+            }
+        });
+
     }
 
 
