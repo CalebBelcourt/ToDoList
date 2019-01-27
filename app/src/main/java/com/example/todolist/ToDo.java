@@ -19,7 +19,7 @@ public class ToDo implements Serializable {
         this.date = date;
     }
 
-    public String geTask() {
+    public String getTask() {
         return task;
     }
 

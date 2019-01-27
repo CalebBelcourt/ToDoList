@@ -1,6 +1,7 @@
 package com.example.todolist;
 
 import android.app.DatePickerDialog;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -67,20 +68,33 @@ public class TaskActivity extends AppCompatActivity {
                 dateEditText.setText(date);
                 }
             };
+
+        //Speech-to-test result
+        Intent intent = getIntent();
+        String str = intent.getStringExtra("result");
+        taskEditText.setText(str);
+
+
+
         }
 
+    //Create the checkmark in the top right corner
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.task_menu, menu);
         return true;
     }
 
+    //When the checkmark in the top right is selected
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         saveTodo();
+        Intent intent = new Intent(TaskActivity.this, ListActivity.class);
+        TaskActivity.this.startActivity(intent);
         return true;
     }
 
+    //Saves (writes) task to Firebase
     void saveTodo() {
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         String key = database.getReference("todoList").push().getKey();

@@ -4,17 +4,22 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#FFDE25"
     android:orientation="vertical"
     android:padding="16dp">
 
     <android.support.v7.widget.RecyclerView
+        android:id="@+id/recyclerView"
         android:layout_width="match_parent"
-        android:layout_height="618dp" />
+        android:layout_height="83dp"
+        android:layout_weight="0.7" />
 
     <android.support.design.widget.FloatingActionButton
-        android:id="@+id/floatingActionButton"
+        android:id="@+id/list_fab"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_gravity="right"
         android:clickable="true"
+        app:backgroundTint="#D02130"
         app:srcCompat="@drawable/ic_add_white" />
 </LinearLayout>
