@@ -1,6 +1,7 @@
 package com.example.todolist;
 
 import android.app.DatePickerDialog;
+import android.app.TimePickerDialog;
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.graphics.Color;
@@ -11,9 +12,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.Spinner;
+import android.widget.TimePicker;
 
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -27,7 +31,7 @@ import java.util.Map;
 
 public class TaskActivity extends AppCompatActivity {
 
-    DatePickerDialog.OnDateSetListener mDateSetListener;
+    DatePickerDialog.OnDateSetListener dateSetListener;
 
     EditText taskEditText;
     EditText dateEditText;
@@ -48,7 +52,14 @@ public class TaskActivity extends AppCompatActivity {
         dateEditText = (EditText)findViewById(R.id.dateEditText);
         timeEditText = (EditText)findViewById(R.id.timeEditText);
 
+        //user can decide how many times they want task to repeat
+        Spinner spinner = (Spinner) findViewById(R.id.spinner);
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
+                R.array.repeat_array, android.R.layout.simple_spinner_item);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner.setAdapter(adapter);
 
+        //Calendar picker widget pops up if user taps calendar imageButton
         calendarButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -60,29 +71,30 @@ public class TaskActivity extends AppCompatActivity {
                 DatePickerDialog dialog = new DatePickerDialog(
                         TaskActivity.this,
                         android.R.style.Theme_Holo_Light_Dialog_MinWidth,
-                        mDateSetListener,
+                        dateSetListener,
                         year, month, day);
                 dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
                 dialog.show();
             }
         });
 
-
-        mDateSetListener = new DatePickerDialog.OnDateSetListener(){
+        //Format date and set it into the date textbox
+        dateSetListener = new DatePickerDialog.OnDateSetListener(){
                 @Override
                 public void onDateSet (DatePicker datePicker, int year, int month, int day){
                 month = month + 1;
 
-                String date = month + "/" + day + "/" + year;
+                String date = year + "/" + month + "/" + day;
                 dateEditText.setText(date);
                 }
             };
 
-        //Speech-to-test result
+        //Speech-to-text result
         Intent intent = getIntent();
         String str = intent.getStringExtra("result");
         taskEditText.setText(str);
 
+        //initializes voice input when mic button is tapped
         micButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -90,13 +102,26 @@ public class TaskActivity extends AppCompatActivity {
             }
         });
 
+        //Time picker widget pops up if user taps time button
         timeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                Calendar currentTime = Calendar.getInstance();
+                int hour = currentTime.get(Calendar.HOUR_OF_DAY);
+                int minute = currentTime.get(Calendar.MINUTE);
+                TimePickerDialog timePicker;
+                timePicker = new TimePickerDialog(TaskActivity.this, new TimePickerDialog.OnTimeSetListener() {
+                    @Override
+                    public void onTimeSet(TimePicker timePicker, int selectedHour, int selectedMinute) {
+                        timeEditText.setText( selectedHour + ":" + selectedMinute);
+                    }
+                }, hour, minute, true);
+                timePicker.setTitle("Select Time");
+                timePicker.show();
             }
         });
 
+        //removes text in date textbox
         dcancelButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -104,6 +129,7 @@ public class TaskActivity extends AppCompatActivity {
             }
         });
 
+        //removes text in time textbox
         tcancelButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -112,7 +138,7 @@ public class TaskActivity extends AppCompatActivity {
         });
 
         }
-
+        //speech-to-text
     private void vInput(){
         Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
         intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
@@ -125,6 +151,7 @@ public class TaskActivity extends AppCompatActivity {
         }
     }
 
+    //set result of voice input to be text in the task textbox
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -148,7 +175,7 @@ public class TaskActivity extends AppCompatActivity {
         return true;
     }
 
-    //When the checkmark in the top right is selected
+    //When the checkmark in the top right is selected, task is saved
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         saveTodo();
@@ -165,6 +192,7 @@ public class TaskActivity extends AppCompatActivity {
         ToDo todo = new ToDo();
         todo.setTask(taskEditText.getText().toString());
         todo.setDate(dateEditText.getText().toString());
+        todo.setTime(timeEditText.getText().toString());
 
         Map<String, Object> childUpdates = new HashMap<>();
         childUpdates.put( key, todo.toFirebaseObject());

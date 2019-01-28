@@ -3,12 +3,13 @@
     <string name="what">What do you need to do?</string>
     <string name="enter">Enter a task</string>
     <string name="due">Due date</string>
-    <string name="date">Enter a date</string>
-    <string name="time">Enter a time</string>
+    <string name="date">Enter a date (YYYY/M/DD)</string>
+    <string name="time">Enter a time (HH:MM)</string>
     <string name="repeat">Repeat</string>
 
 
     <string-array name="repeat_array">
+        <item>None</item>
         <item>Once a day</item>
         <item>Once a week</item>
         <item>Once a month</item>

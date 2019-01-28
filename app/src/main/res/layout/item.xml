@@ -20,6 +20,15 @@
             android:layout_below="@+id/task_check"
             />
 
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/task_time"
+            android:layout_toRightOf="@+id/task_date"
+            android:layout_below="@id/task_check"
+            android:paddingLeft="16dp"
+            />
+
         <CheckBox
             android:id="@+id/task_check"
             android:layout_width="800dp"
